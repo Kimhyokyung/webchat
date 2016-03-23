@@ -10,11 +10,12 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import tutorial01.chat.ChatWebSocketHandler;
 import tutorial01.echo.EchoWebSocketHandler;
 
 @Configuration
 @EnableWebMvc
-@EnableWebSocket
+@EnableWebSocket //webSocketHandler를 Spring@MVC에 통합하기 위해
 public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
 
     @Override
@@ -24,11 +25,22 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 
         // SocketJS 지원 url을 /socketjs/echo에 연결합니다.
         registry.addHandler(echoHandler(), "/socketjs/echo").withSockJS();
+        
+        // WebSocket을 /chat 에 연결합니다.
+        registry.addHandler(chatHandler(), "/chat");
+
+        // SocketJS 지원 url을 /socketjs/chat에 연결합니다.
+        registry.addHandler(chatHandler(), "/socketjs/chat").withSockJS();
     }
 
     @Bean
     public WebSocketHandler echoHandler() {
         return new EchoWebSocketHandler();
+    }
+    
+    @Bean
+    public WebSocketHandler chatHandler() {
+        return new ChatWebSocketHandler();
     }
 
     @Override

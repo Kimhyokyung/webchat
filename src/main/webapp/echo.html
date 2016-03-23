@@ -58,14 +58,14 @@
 
             ws.onopen = function () {
                 setConnected(true);
-                log('Info: connection opened.');
+                log('Info: 연결되었습니다..');
             };
             ws.onmessage = function (event) {
                 log('Received: ' + event.data);
             };
             ws.onclose = function (event) {
                 setConnected(false);
-                log('Info: connection closed.');
+                log('Info: 연결을 끊었습니다.');
                 log(event);
             };
         }

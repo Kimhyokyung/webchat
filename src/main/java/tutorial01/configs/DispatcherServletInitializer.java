@@ -20,6 +20,7 @@ import javax.servlet.ServletRegistration.Dynamic;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+//web.xml 대체(Sevlet Configuration에서 만들어진 WebConfig.class 리턴)
 public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
