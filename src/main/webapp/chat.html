@@ -38,34 +38,45 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script type="text/javascript">
-        var socket = null;
+
+        var sock = null;
         var stompClient = null;
         
         function connect() {
-        	socket = new SockJS('/webchat/socketjs/chat')
-        	stompClient = Stomp.over(socket);
-        	console.log("try connection");
-        	stompClient.connect({}, function(frame) {
-                log('[STOMP Connect]' + frame);
-            });
+        	sock = new SockJS('/tutorial01/socketjs/chat');
+        	
+        	sock.onopen = function () {
+                log('[Connect]');
+            };
+            
+            sock.onmessage = function (event) {
+                log('[SEND]' + event.data);
+            };
+            
+            sock.onclose = function (event) {
+                log('[Disconnect]');
+            };
         }
 
-        function stomp() {
-        	var name = document.getElementById('nickname').value;
-        	console.log(name);
-        	stompClient.send("/stomp", {}, name);
-        	console.log(stompClient);
+        function disconnect() {
+            if (sock != null) {
+            	sock.close();
+            	sock = null;
+            }
         }
         
-        function chat() {a
-            if (ws != null) {
-                var message = document.getElementById('message').value;
-                
-                log('[MSG]' + message);
-                ws.send(message);
-            } else {
-                alert('connection not established, please connect.');
-            }
+        function init() {
+        	var nickname = document.getElementById('nickname').value;
+        	var msg = 'init/' + nickname;
+        	log('[Init]');
+        	sock.send(msg);
+        }
+        
+        function chat() {
+        	var receiver = document.getElementById('receiver').value;
+            var message = document.getElementById('message').value;
+            var msg = 'chat/' + receiver + '/' + message;
+            sock.send(msg);
         }
         
         function log(message) {
@@ -79,24 +90,23 @@
             }
             console.scrollTop = console.scrollHeight;
         }
-        
-        function clear() {
-            $('#message').html('');
-        }
     </script>
 </head>
 <body>
 	<div>
 		<div id="connect-container">
 			<div>
-				<button id="connect" onclick="connect();">Connect</button>
+				<button id="connect" onclick="connect();">connect</button>
+				<button id="disconnect" onclick="disconnect();">disconnect</button>
 			</div>
 			<div>
-				<input type="text" id="nickname" value="nickname" /><br />
-				<textarea id="message" style="width: 350px">Here is a message!</textarea>
+				<input type="text" id="nickname" value="nickname"/>
+				<button id="init" onclick="init();">init</button>
 			</div>
 			<div>
-				<button id="chat" onclick="stomp();">chat</button>
+				<input type="text" id="receiver" value="receiver"/>
+				<textarea id="message" style="width: 350px">message</textarea>
+				<button id="chat" onclick="chat();">chat</button>
 			</div>
 		</div>
 		<div id="console-container">
