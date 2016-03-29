@@ -12,7 +12,7 @@ public class EchoWebSocketHandler extends TextWebSocketHandler {
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String payloadMessage = (String) message.getPayload();
         session.sendMessage(new TextMessage("ECHO : " + payloadMessage));
-   }
+   } 
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -26,3 +26,4 @@ public class EchoWebSocketHandler extends TextWebSocketHandler {
         super.afterConnectionClosed(session, status);
     }
 }
+  

@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -20,14 +22,9 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        // WebSocket을 /echo 에 연결합니다.
-        registry.addHandler(echoHandler(), "/echo");
 
         // SocketJS 지원 url을 /socketjs/echo에 연결합니다.
-        registry.addHandler(echoHandler(), "/socketjs/echo").withSockJS();
-        
-        // WebSocket을 /chat 에 연결합니다.
-        registry.addHandler(chatHandler(), "/chat");
+        registry.addHandler(echoHandler(), "/socketjs/echo").withSockJS();	//define    EndPoint
 
         // SocketJS 지원 url을 /socketjs/chat에 연결합니다.
         registry.addHandler(chatHandler(), "/socketjs/chat").withSockJS();
@@ -42,9 +39,18 @@ public class WebConfig extends WebMvcConfigurerAdapter implements WebSocketConfi
     public WebSocketHandler chatHandler() {
         return new ChatWebSocketHandler();
     }
-
+ 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+    
+    @Bean  
+    public UrlBasedViewResolver setupViewResolver() {  
+        UrlBasedViewResolver resolver = new UrlBasedViewResolver();  
+        resolver.setPrefix("/jsp/");  
+        resolver.setSuffix(".jsp");  
+        resolver.setViewClass(JstlView.class);  
+        return resolver;  
     }
 }
