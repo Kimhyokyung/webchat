@@ -7,14 +7,17 @@
 	float: left;
 	width: 400px
 }
+
 #connect-container div {
 	padding: 5px;
 }
+
 #console-container {
 	float: left;
 	margin-left: 15px;
 	width: 400px;
 }
+
 #console {
 	border: 1px solid #CCCCCC;
 	border-right-color: #999999;
@@ -24,6 +27,7 @@
 	padding: 5px;
 	width: 100%;
 }
+
 #console p {
 	padding: 0;
 	margin: 0;
@@ -34,6 +38,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.3/sockjs.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script type="text/javascript">
+
         var sock = null;
         var stompClient = null;
         
@@ -52,6 +57,7 @@
                 log('[Disconnect]');
             };
         }
+
         function disconnect() {
             if (sock != null) {
             	sock.close();
